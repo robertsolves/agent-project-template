@@ -91,22 +91,34 @@ append_missing_lines() { # add the template's lines a file lacks
   return 0
 }
 
-merge_claude_settings() {
-  local dst=.claude/settings.json
-  if ! command -v python3 >/dev/null; then note kept "$dst (merge the deny list from the template by hand)"; return; fi
+merge_claude_settings() { # add the template's deny rules and Stop hook to an existing settings file
+  local dst=.claude/settings.json result
+  if ! command -v python3 >/dev/null; then note kept "$dst (add the deny list and Stop hook from the template by hand)"; return; fi
   [ "$dry" = 1 ] && { note appended "$dst"; return; }
-  python3 -I - "$tpl/.claude/settings.json" "$dst" <<'PY' && note appended "$dst" || note kept "$dst (not valid JSON, merge the deny list by hand)"
+  result="$(python3 -I - "$tpl/.claude/settings.json" "$dst" 2>/dev/null <<'PY' || echo invalid
 import json, sys
 template, target = (json.load(open(p)) for p in sys.argv[1:3])
 deny = target.setdefault("permissions", {}).setdefault("deny", [])
 missing = [rule for rule in template["permissions"]["deny"] if rule not in deny]
-if not missing:
-    sys.exit(0)
 deny.extend(missing)
+# The Stop hook that makes agents file what they noticed before finishing.
+stop = target.setdefault("hooks", {}).setdefault("Stop", [])
+added = [] if "record_check.sh" in json.dumps(stop) else template["hooks"]["Stop"]
+stop.extend(added)
+if not missing and not added:
+    print("same")
+    sys.exit(0)
 with open(sys.argv[2], "w") as f:
     json.dump(target, f, indent=2)
     f.write("\n")
+print("merged")
 PY
+)"
+  case "$result" in
+    merged) note appended "$dst" ;;
+    same) ;;
+    *) note kept "$dst (not valid JSON: add the deny list and Stop hook from the template by hand)" ;;
+  esac
 }
 
 cd "$tpl"

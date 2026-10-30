@@ -18,6 +18,8 @@ I got sick of finding the same problems twice, so in my own projects every agent
 | `CHANGELOG.md` | one line per change that matters, and one per bug fix |
 | `todo/<topic>.md` | findings from an audit you asked for, one file per topic |
 
+Agents do this as part of every task, without being asked. It's near the top of `AGENTS.md`, with a short check to run before saying a task is done. Claude Code also gets a Stop hook (`.claude/hooks/record_check.sh`). When a session has changed files, it makes the agent stop once before finishing and file what it noticed. It only fires once per set of changes, so it can't loop, and a turn that only read code never triggers it.
+
 The test for a bug is the failure, not the size. A one-line typo that corrupts a value goes in `BUGS.md`. A whole module that works but should be rewritten goes in `TODO.md`. That rule ends most of the "where does this go" arguments.
 
 ## The changelog agents can't read

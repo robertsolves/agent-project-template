@@ -8,6 +8,29 @@ How coding agents work in this repo. `CLAUDE.md` and `GEMINI.md` only import thi
 
 This file is a map, not a copy of the docs. When something here points at a doc, go and read it instead of guessing. If something is unclear, stop and ask.
 
+## Write down what you notice, always
+
+This is part of every task, not a separate job, and nobody will ask you to do it. While you work, anything you notice and don't fix goes into the right file straight away. At the end of every task, anything still broken or unfinished goes in too. Don't go hunting for problems, but don't let one you saw disappear. Saying it in chat doesn't count: chat is gone when the session ends.
+
+| File | What goes in it | Who closes it |
+|---|---|---|
+| `BUGS.md` | Anything with a real failure: wrong output, a crash, lost data, a check that can never fire | an agent or a developer |
+| `TODO.md` | Work with no failure: polish, deferred work, improvements, open questions | an agent |
+| `MANUAL_TODO.md` | Work an agent in a terminal can't do: logins, payments, keys, legal advice, a real device | a human |
+| `CHANGELOG.md` | One line per change that matters, and one per bug fix | written by the script, never read |
+| `todo/<topic>.md` | Findings from an audit or sweep someone asked for | see `todo/AGENTS.md` |
+
+The test for a bug is the failure, not the size. A one-line typo that corrupts a value is a bug. A whole module that works but should be rewritten is a TODO.
+
+Before you say a task is done, check:
+
+1. Did I notice a bug I didn't fix? It's in `BUGS.md`.
+2. Did I leave anything unfinished, put off or worth improving? It's in `TODO.md`.
+3. Does something need a person (a login, a key, a decision)? It's in `MANUAL_TODO.md`.
+4. Did I fix a bug or change behaviour? There's a changelog line from `scripts/add_changelog_line.sh`, and the fixed entry is gone from `BUGS.md` or `TODO.md`.
+
+Name the entries you added or closed in your final message. If there was nothing to record, say so in one line. The `record-keeping` skill (`.agents/skills/record-keeping/SKILL.md`) has the details: which file, checking for duplicates, the entry format, closing an entry.
+
 ## Folder guides
 
 Some folders have their own `AGENTS.md`, with a `CLAUDE.md` beside it that imports it. Read the guide before you change anything in that folder. Claude Code loads it by itself when you touch the folder. Other agents may not, so open it yourself.
@@ -40,22 +63,6 @@ A guide holds the rules for its own folder and nothing else. When you add a guid
 
   Skip it for refactors, formatting and doc-only edits. Every bug fix gets a line.
 - If you made a decision a future developer needs to know about, write it in the doc that already covers that part of the system. Don't start a new doc for it. If no doc fits, ask.
-
-## Write down what you notice
-
-Don't go hunting for problems. But anything you notice and don't fix, and anything still broken or unfinished when your task ends, gets written down without being asked. Saying it in chat doesn't count: chat is gone after the session ends.
-
-| File | What goes in it | Who closes it |
-|---|---|---|
-| `BUGS.md` | Anything with a real failure: wrong output, a crash, lost data, a check that can never fire | an agent or a developer |
-| `TODO.md` | Work with no failure: polish, deferred work, improvements, open questions | an agent |
-| `MANUAL_TODO.md` | Work an agent in a terminal can't do: logins, payments, keys, legal advice, a real device | a human |
-| `CHANGELOG.md` | One line per change that matters, and one per bug fix | written by the script, never read |
-| `todo/<topic>.md` | Findings from an audit or sweep someone asked for | see `todo/AGENTS.md` |
-
-The test for a bug is the failure, not the size. A one-line typo that corrupts a value is a bug. A whole module that works but should be rewritten is a TODO.
-
-The `record-keeping` skill (`.agents/skills/record-keeping/SKILL.md`) has the step by step: which file, how to check for duplicates, the entry format, and how to close an entry.
 
 ## Working efficiently
 
