@@ -94,10 +94,10 @@ It never overwrites anything. A file you already have is left alone and listed a
 
 ## Combine it with the other kits
 
-This is one of four kits that install side by side: [agent-project-template](https://github.com/robertsolves/agent-project-template), [agent-commands](https://github.com/robertsolves/agent-commands), [dart-agent-kit](https://github.com/robertsolves/dart-agent-kit) and [prompt-trials](https://github.com/robertsolves/prompt-trials). To add any mix in one line:
+This is one of three kits that install side by side: [agent-project-template](https://github.com/robertsolves/agent-project-template), [agent-commands](https://github.com/robertsolves/agent-commands) and [dart-agent-kit](https://github.com/robertsolves/dart-agent-kit). To add any mix in one line:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/robertsolves/agent-commands/main/kit.sh | bash -s -- add template commands dart trials
+curl -fsSL https://raw.githubusercontent.com/robertsolves/agent-commands/main/kit.sh | bash -s -- add template commands dart
 ```
 
 Or run `... kit.sh | bash -s -- setup` once, and then just ask your agent to "add the dart kit" in any project.
@@ -110,7 +110,7 @@ The template works fine by itself. If you want commands that go looking for prob
 curl -fsSL https://raw.githubusercontent.com/robertsolves/agent-commands/main/install.sh | bash
 ```
 
-For Dart and Flutter projects there's also [dart-agent-kit](https://github.com/robertsolves/dart-agent-kit). To check that your own commands still work on a cheap model, there's [prompt-trials](https://github.com/robertsolves/prompt-trials).
+For Dart and Flutter projects there's also [dart-agent-kit](https://github.com/robertsolves/dart-agent-kit).
 
 ## Licence
 
