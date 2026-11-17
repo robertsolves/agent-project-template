@@ -51,7 +51,7 @@ script="${BASH_SOURCE[0]:-}"
 if [ -n "$script" ] && [ -f "$script" ]; then
   tpl="$(cd "$(dirname "$script")" && pwd)"
 fi
-if [ -z "$tpl" ] || [ ! -f "$tpl/BUGS.md" ]; then
+if [ -z "$tpl" ] || [ ! -f "$tpl/AGENTS.md" ]; then
   command -v curl >/dev/null || die "curl is needed to download $OWNER/$REPO"
   tmp="$(mktemp -d)"
   trap 'rm -rf "$tmp"' EXIT
@@ -91,9 +91,9 @@ append_missing_lines() { # add the template's lines a file lacks
   return 0
 }
 
-merge_claude_settings() { # add the template's deny rules and Stop hook to an existing settings file
+merge_claude_settings() { # add the template's deny rules to an existing settings file
   local dst=.claude/settings.json result
-  if ! command -v python3 >/dev/null; then note kept "$dst (add the deny list and Stop hook from the template by hand)"; return; fi
+  if ! command -v python3 >/dev/null; then note kept "$dst (add the deny list from the template by hand)"; return; fi
   [ "$dry" = 1 ] && { note appended "$dst"; return; }
   result="$(python3 -I - "$tpl/.claude/settings.json" "$dst" 2>/dev/null <<'PY' || echo invalid
 import json, sys
@@ -101,11 +101,7 @@ template, target = (json.load(open(p)) for p in sys.argv[1:3])
 deny = target.setdefault("permissions", {}).setdefault("deny", [])
 missing = [rule for rule in template["permissions"]["deny"] if rule not in deny]
 deny.extend(missing)
-# The Stop hook that makes agents file what they noticed before finishing.
-stop = target.setdefault("hooks", {}).setdefault("Stop", [])
-added = [] if "record_check.sh" in json.dumps(stop) else template["hooks"]["Stop"]
-stop.extend(added)
-if not missing and not added:
+if not missing:
     print("same")
     sys.exit(0)
 with open(sys.argv[2], "w") as f:
@@ -117,7 +113,7 @@ PY
   case "$result" in
     merged) note appended "$dst" ;;
     same) ;;
-    *) note kept "$dst (not valid JSON: add the deny list and Stop hook from the template by hand)" ;;
+    *) note kept "$dst (not valid JSON: add the deny list from the template by hand)" ;;
   esac
 }
 

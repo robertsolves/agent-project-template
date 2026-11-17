@@ -12,7 +12,6 @@ Rules for scripts. The rules in the root `AGENTS.md` apply too.
 
 ## Scripts
 
-- `add_changelog_line.sh "<line>"`: adds one dated line to `CHANGELOG.md` without reading the file.
 - `check_deps.sh`: checks the tools the project needs are installed. Edit the lists at the top.
 - `setup_dev_env.sh`: one-time setup for a fresh clone. Turns on the hooks in `.githooks/` and runs `check_deps.sh`.
 - `agent/info_diff.sh [base-ref]`: what changed, in a few lines.
